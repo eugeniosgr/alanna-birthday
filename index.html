@@ -15,20 +15,10 @@ body{
 }
 
 /* SCREENS */
-.screen{
-    display:none;
-    padding:40px;
-}
-
-.active{
-    display:block;
-}
+.screen{display:none;padding:40px;}
+.active{display:block;}
 
 /* LOCK */
-#locked{
-    padding:50px;
-}
-
 input{
     padding:10px;
     font-size:16px;
@@ -47,8 +37,7 @@ button{
 
 /* ENVELOPE */
 #envelope{
-    font-size:80px;
-    margin-top:40px;
+    font-size:90px;
     cursor:pointer;
     transition:transform 0.3s;
 }
@@ -73,6 +62,16 @@ button{
     to{transform:scale(1);opacity:1;}
 }
 
+/* FADE EFFECT */
+.fade{
+    animation:fadeIn 1.2s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+
 /* CONFETTI */
 .confetti{
     position:fixed;
@@ -94,7 +93,7 @@ button{
 
 <body>
 
-<!-- LOCK SCREEN -->
+<!-- LOCK -->
 <div id="locked" class="screen active">
 
 <h1>🐙 Birthday Message Incoming</h1>
@@ -130,16 +129,18 @@ Next page ➜
 
 </div>
 
-<!-- PAGE 2: ENVELOPE -->
+<!-- PAGE 2 -->
 <div id="page2" class="screen">
 
 <h2>One more thing...</h2>
 
-<div id="envelope" onclick="openEnvelope()">
-💌
-</div>
+<div id="envelope">💌</div>
 
-<p>Click the envelope</p>
+<p>Click the envelope + play music</p>
+
+<button onclick="playExperience()">
+▶ Play True Friend + Open
+</button>
 
 </div>
 
@@ -168,20 +169,20 @@ Hope this next year is full of calm days, good books, and things that make you f
 
 – Eugenio 💛`;
 
-function showScreen(id){
+function show(id){
 document.querySelectorAll(".screen")
 .forEach(s => s.classList.remove("active"));
 
 document.getElementById(id).classList.add("active");
 }
 
-/* UNLOCK */
+/* LOCK */
 function unlock(){
 
 const pass = document.getElementById("password").value;
 
 if(pass === "octopus"){
-showScreen("page1");
+show("page1");
 startConfetti();
 }else{
 document.getElementById("wrong").innerText="Nice try 😌";
@@ -189,17 +190,38 @@ document.getElementById("wrong").innerText="Nice try 😌";
 
 }
 
-/* NEXT PAGE */
+/* NEXT */
 function nextPage(){
-showScreen("page2");
+show("page2");
 }
 
-/* OPEN ENVELOPE */
-function openEnvelope(){
-showScreen("page3");
-document.getElementById("letterBox").style.display="block";
-typeLetter();
+/* 🎬 CINEMATIC EXPERIENCE */
+function playExperience(){
+
+// music
+window.open("https://www.youtube.com/watch?v=3tGJ4ZlZ7u0","_blank");
+
+// fade effect
+document.body.classList.add("fade");
+
+// confetti burst
 startConfetti();
+
+// open envelope animation
+document.getElementById("envelope").style.transform="scale(0.8)";
+setTimeout(()=>openEnvelope(),1200);
+
+}
+
+/* OPEN LETTER */
+function openEnvelope(){
+
+show("page3");
+
+document.getElementById("letterBox").style.display="block";
+
+typeLetter();
+
 }
 
 /* TYPE LETTER */
@@ -222,9 +244,9 @@ typing();
 /* CONFETTI */
 function startConfetti(){
 
-for(let i=0;i<80;i++){
+for(let i=0;i<90;i++){
 
-let c = document.createElement("div");
+let c=document.createElement("div");
 c.className="confetti";
 c.style.left=Math.random()*100+"vw";
 c.style.backgroundColor=
