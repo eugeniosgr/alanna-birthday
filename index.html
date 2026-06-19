@@ -2,65 +2,115 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Happy Birthday Alanna</title>
+<title>Birthday Message</title>
 
 <style>
+
 body{
-    font-family: Arial, sans-serif;
+    margin:0;
+    font-family: Arial;
     background:#fdf6ee;
     text-align:center;
-    padding:50px;
+    overflow:hidden;
 }
 
 .container{
-    max-width:700px;
-    margin:auto;
+    padding:50px;
 }
 
 h1{
-    color:#444;
+    margin-top:40px;
 }
 
 #message{
     display:none;
-    margin-top:30px;
     background:white;
     padding:25px;
+    margin:30px auto;
+    width:80%;
+    max-width:600px;
     border-radius:15px;
 }
 
+input{
+    padding:10px;
+    font-size:16px;
+}
+
 button{
-    padding:12px 25px;
-    font-size:18px;
-    border:none;
-    border-radius:10px;
+    padding:10px 20px;
+    margin-top:10px;
     cursor:pointer;
 }
+
+/* ✨ STARS */
+#stars{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    pointer-events:none;
+    overflow:hidden;
+}
+
+.star{
+    position:absolute;
+    font-size:18px;
+    animation:fall linear forwards;
+}
+
+@keyframes fall{
+    from{
+        transform:translateY(-50px);
+        opacity:1;
+    }
+    to{
+        transform:translateY(100vh);
+        opacity:0;
+    }
+}
+
 </style>
 </head>
 
 <body>
 
+<div id="stars"></div>
+
 <div class="container">
 
-<h1>🐙 Birthday Message Incoming 🐙</h1>
+<!-- LOCK SCREEN -->
+<div id="locked">
+
+<h1>🐙 Birthday Message Incoming</h1>
 
 <p>
-This page is locked until your birthday.
+Hi Alanna,<br><br>
+
+Yes, I made an entire website for your birthday.<br>
+No, I don't want to talk about how much time this took. 😌
 </p>
 
-<h2 id="countdown"></h2>
+<p><b>Enter secret password:</b></p>
 
-<button id="openBtn" style="display:none;">
-Open your birthday message 💛
-</button>
+<input type="password" id="password">
 
+<br>
+
+<button onclick="unlock()">Unlock</button>
+
+<p id="wrong"></p>
+
+</div>
+
+<!-- MESSAGE -->
 <div id="message">
 
-<h2>Happy Birthday Alanna!</h2>
+<h1>Happy Birthday Alanna 🎂</h1>
 
 <p>
-Your birthday letter will go here.
+(This is where your letter goes 💛)
 </p>
 
 </div>
@@ -69,48 +119,47 @@ Your birthday letter will go here.
 
 <script>
 
-const unlockDate =
-new Date("2026-06-25T00:00:00");
+// 🔓 PASSWORD
+function unlock(){
 
-const countdown =
-document.getElementById("countdown");
+const pass =
+document.getElementById("password").value;
 
-const button =
-document.getElementById("openBtn");
+if(pass === "octopus"){
 
-const message =
-document.getElementById("message");
+document.getElementById("locked").style.display="none";
+document.getElementById("message").style.display="block";
 
-function updateCountdown(){
+startStars();
 
-const now = new Date();
-const diff = unlockDate - now;
+}else{
 
-if(diff <= 0){
+document.getElementById("wrong").innerText =
+"Nice try 😌";
 
-countdown.innerHTML =
-"🎉 It's your birthday!";
-
-button.style.display = "inline-block";
-
-return;
 }
 
-const days =
-Math.floor(diff/(1000*60*60*24));
-
-countdown.innerHTML =
-days + " days remaining";
 }
 
-button.onclick = () =>{
-message.style.display="block";
-button.style.display="none";
+// ✨ STARS
+function createStar(){
+
+const star = document.createElement("div");
+star.className="star";
+star.innerHTML="✨";
+
+star.style.left = Math.random()*100 + "vw";
+star.style.animationDuration =
+(3 + Math.random()*3) + "s";
+
+document.getElementById("stars").appendChild(star);
+
+setTimeout(()=>star.remove(),7000);
 }
 
-setInterval(updateCountdown,1000);
-
-updateCountdown();
+function startStars(){
+setInterval(createStar,300);
+}
 
 </script>
 
