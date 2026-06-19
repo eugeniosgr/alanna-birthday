@@ -15,8 +15,13 @@ body{
 }
 
 /* SCREENS */
-.screen{display:none;padding:40px;}
-.active{display:block;}
+.screen{
+    display:none;
+    padding:40px;
+}
+.active{
+    display:block;
+}
 
 /* INPUT */
 input{
@@ -54,6 +59,8 @@ button{
     max-width:600px;
     margin:30px auto;
     border-radius:15px;
+    position:relative;
+    z-index:2;
     animation:pop 0.6s ease;
 }
 
@@ -78,10 +85,51 @@ button{
     }
 }
 
+/* PHOTO BACKGROUND */
+#photo-bg{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:0;
+}
+
+.photo{
+    position:absolute;
+    width:120px;
+    height:120px;
+    object-fit:cover;
+    border-radius:12px;
+    opacity:0;
+    animation:floatPhoto linear forwards, fadePhoto ease-in-out forwards;
+}
+
+@keyframes floatPhoto{
+    from{
+        transform:translateY(100vh);
+    }
+    to{
+        transform:translateY(-200px);
+    }
+}
+
+@keyframes fadePhoto{
+    0%{opacity:0;}
+    15%{opacity:0.35;}
+    85%{opacity:0.35;}
+    100%{opacity:0;}
+}
+
 </style>
 </head>
 
 <body>
+
+<!-- BACKGROUND PHOTOS -->
+<div id="photo-bg"></div>
 
 <!-- LOCK -->
 <div id="locked" class="screen active">
@@ -167,6 +215,7 @@ Hope this year brings you calm, love, and good books.
 
 – Eugenio 💛`;
 
+/* NAVIGATION */
 function show(id){
 document.querySelectorAll(".screen")
 .forEach(s => s.classList.remove("active"));
@@ -180,6 +229,7 @@ const pass = document.getElementById("password").value;
 
 if(pass === "octopus"){
 show("page1");
+startConfetti();
 }else{
 document.getElementById("wrong").innerText="Nice try 😌";
 }
@@ -195,15 +245,14 @@ show("page2");
 function playMusic(){
 
 window.open(
-"https://youtu.be/XYI_vUIO5OE?si=0vmI4M1vO6P4ukhq",
+"https://www.youtube.com/watch?v=gfiJnbbhC2c&list=RDgfiJnbbhC2c&start_radio=1",
 "_blank"
 );
 
-// unlock next button
 document.getElementById("next2btn").style.display="inline-block";
 }
 
-/* PAGE 2 → PAGE 3 */
+/* PAGE 2 */
 function next2(){
 show("page3");
 }
@@ -218,6 +267,8 @@ document.getElementById("letterBox").style.display="block";
 typeLetter();
 
 startConfetti();
+
+startPhotos();
 
 }
 
@@ -253,6 +304,32 @@ c.style.animationDuration=(2+Math.random()*3)+"s";
 document.body.appendChild(c);
 
 setTimeout(()=>c.remove(),5000);
+}
+
+}
+
+/* PHOTOS */
+function startPhotos(){
+
+const images = [
+"https://images.unsplash.com/photo-1520975928316-4d3c6c1d3d8b",
+"https://images.unsplash.com/photo-1520975682031-a1d1c1d6d3c1",
+"https://images.unsplash.com/photo-1520975910011-3a3c3c3c3c3c",
+"https://images.unsplash.com/photo-1520975920000-1a1a1a1a1a1a"
+];
+
+for(let i=0;i<8;i++){
+
+let img=document.createElement("img");
+img.className="photo";
+img.src=images[Math.floor(Math.random()*images.length)];
+
+img.style.left=Math.random()*100+"vw";
+img.style.animationDuration=(10+Math.random()*10)+"s";
+img.style.animationDelay=(Math.random()*5)+"s";
+
+document.getElementById("photo-bg").appendChild(img);
+
 }
 
 }
