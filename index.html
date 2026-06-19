@@ -14,31 +14,63 @@ body{
     overflow:hidden;
 }
 
-/* LOCK SCREEN */
+/* SCREENS */
+.screen{
+    display:none;
+    padding:40px;
+}
+
+.active{
+    display:block;
+}
+
+/* LOCK */
 #locked{
     padding:50px;
 }
 
-/* MESSAGE */
-#message{
-    display:none;
-    padding:40px;
-    max-width:700px;
-    margin:auto;
-    background:white;
-    border-radius:15px;
-}
-
-/* INPUT */
 input{
     padding:10px;
     font-size:16px;
     margin-top:10px;
 }
 
-<button onclick="playMusic()">
-▶ Play True Friend
-</button>
+button{
+    padding:10px 20px;
+    margin-top:15px;
+    cursor:pointer;
+    border:none;
+    border-radius:10px;
+    background:#333;
+    color:white;
+}
+
+/* ENVELOPE */
+#envelope{
+    font-size:80px;
+    margin-top:40px;
+    cursor:pointer;
+    transition:transform 0.3s;
+}
+
+#envelope:hover{
+    transform:scale(1.1);
+}
+
+/* LETTER */
+#letterBox{
+    display:none;
+    background:white;
+    padding:30px;
+    max-width:600px;
+    margin:30px auto;
+    border-radius:15px;
+    animation:pop 0.6s ease;
+}
+
+@keyframes pop{
+    from{transform:scale(0.7);opacity:0;}
+    to{transform:scale(1);opacity:1;}
 }
 
 /* CONFETTI */
@@ -47,8 +79,7 @@ input{
     top:-10px;
     width:10px;
     height:10px;
-    background:red;
-    animation:fall 3s linear forwards;
+    animation:fall linear forwards;
 }
 
 @keyframes fall{
@@ -64,7 +95,7 @@ input{
 <body>
 
 <!-- LOCK SCREEN -->
-<div id="locked">
+<div id="locked" class="screen active">
 
 <h1>🐙 Birthday Message Incoming</h1>
 
@@ -73,9 +104,7 @@ Yes, I made a whole webpage for your birthday.<br>
 No, I will not be taking questions.
 </p>
 
-<p><b>Enter secret password:</b></p>
-
-<input type="password" id="password">
+<input type="password" id="password" placeholder="secret password">
 
 <br>
 
@@ -85,53 +114,109 @@ No, I will not be taking questions.
 
 </div>
 
-<!-- MESSAGE -->
-<div id="message">
+<!-- PAGE 1 -->
+<div id="page1" class="screen">
 
-<h1>Happy Birthday Alanna 🎂</h1>
+<h2>Hi Alanna 💛</h2>
 
-<p id="letter">
-
-(Here goes your letter 💛)
-
+<p>
+I hope this next year brings you peace, good books,<br>
+good people, and more soft happy moments.
 </p>
 
-<br><br>
+<button onclick="nextPage()">
+Next page ➜
+</button>
 
-<!-- MUSIC -->
-function playMusic(){
-    window.open("https://www.youtube.com/watch?v=3tGJ4ZlZ7u0", "_blank");
-}
+</div>
 
-<br><br>
+<!-- PAGE 2: ENVELOPE -->
+<div id="page2" class="screen">
 
+<h2>One more thing...</h2>
 
+<div id="envelope" onclick="openEnvelope()">
+💌
+</div>
+
+<p>Click the envelope</p>
+
+</div>
+
+<!-- LETTER -->
+<div id="page3" class="screen">
+
+<div id="letterBox">
+
+<h2>Happy Birthday Alanna 🎂</h2>
+
+<p id="letter"></p>
+
+</div>
 
 </div>
 
 <script>
 
-/* PASSWORD */
+const letterText = `Hi Alanna,
+
+Happy Birthday!!
+
+I made this little website for you because I thought it would be fun (and it was).
+
+Hope this next year is full of calm days, good books, and things that make you feel like yourself again.
+
+– Eugenio 💛`;
+
+function showScreen(id){
+document.querySelectorAll(".screen")
+.forEach(s => s.classList.remove("active"));
+
+document.getElementById(id).classList.add("active");
+}
+
+/* UNLOCK */
 function unlock(){
 
-const pass =
-document.getElementById("password").value;
+const pass = document.getElementById("password").value;
 
 if(pass === "octopus"){
-
-document.getElementById("locked").style.display="none";
-document.getElementById("message").style.display="block";
-
+showScreen("page1");
 startConfetti();
-typeLetter();
-
 }else{
-
-document.getElementById("wrong").innerText =
-"Nice try 😌";
+document.getElementById("wrong").innerText="Nice try 😌";
+}
 
 }
 
+/* NEXT PAGE */
+function nextPage(){
+showScreen("page2");
+}
+
+/* OPEN ENVELOPE */
+function openEnvelope(){
+showScreen("page3");
+document.getElementById("letterBox").style.display="block";
+typeLetter();
+startConfetti();
+}
+
+/* TYPE LETTER */
+function typeLetter(){
+
+let i=0;
+document.getElementById("letter").innerHTML="";
+
+function typing(){
+if(i < letterText.length){
+document.getElementById("letter").innerHTML += letterText.charAt(i);
+i++;
+setTimeout(typing,25);
+}
+}
+
+typing();
 }
 
 /* CONFETTI */
@@ -144,52 +229,12 @@ c.className="confetti";
 c.style.left=Math.random()*100+"vw";
 c.style.backgroundColor=
 ["#ff6b6b","#feca57","#48dbfb","#1dd1a1"][Math.floor(Math.random()*4)];
-
 c.style.animationDuration=(2+Math.random()*3)+"s";
 
 document.body.appendChild(c);
 
 setTimeout(()=>c.remove(),5000);
-
 }
-
-}
-
-/* TYPE LETTER */
-function typeLetter(){
-
-let text =
-`Hi Alanna,
-
-Happy Birthday!!
-
-(This is where your real letter goes 💛)`;
-
-let i=0;
-
-let speed = 30;
-
-function typing(){
-
-if(i < text.length){
-
-document.getElementById("letter").innerHTML += text.charAt(i);
-i++;
-setTimeout(typing,speed);
-}
-
-}
-
-document.getElementById("letter").innerHTML="";
-typing();
-
-}
-
-/* MUSIC */
-function playMusic(){
-
-let iframe = document.getElementById("music");
-iframe.src += "&autoplay=1";
 
 }
 
