@@ -18,7 +18,7 @@ body{
 .screen{display:none;padding:40px;}
 .active{display:block;}
 
-/* LOCK */
+/* INPUT */
 input{
     padding:10px;
     font-size:16px;
@@ -62,16 +62,6 @@ button{
     to{transform:scale(1);opacity:1;}
 }
 
-/* FADE EFFECT */
-.fade{
-    animation:fadeIn 1.2s ease;
-}
-
-@keyframes fadeIn{
-    from{opacity:0;}
-    to{opacity:1;}
-}
-
 /* CONFETTI */
 .confetti{
     position:fixed;
@@ -98,12 +88,9 @@ button{
 
 <h1>🐙 Birthday Message Incoming</h1>
 
-<p>
-Yes, I made a whole webpage for your birthday.<br>
-No, I will not be taking questions.
-</p>
+<p>Enter secret password:</p>
 
-<input type="password" id="password" placeholder="secret password">
+<input type="password" id="password">
 
 <br>
 
@@ -119,33 +106,44 @@ No, I will not be taking questions.
 <h2>Hi Alanna 💛</h2>
 
 <p>
-I hope this next year brings you peace, good books,<br>
-good people, and more soft happy moments.
+I hope this next year brings you peace,<br>
+good books and soft happy moments.
 </p>
 
-<button onclick="nextPage()">
-Next page ➜
+<button onclick="next1()">Next ➜</button>
+
+</div>
+
+<!-- PAGE 2 MUSIC -->
+<div id="page2" class="screen">
+
+<h2>Before we continue...</h2>
+
+<p>Play the soundtrack 🎵</p>
+
+<button onclick="playMusic()">▶ Play True Friend</button>
+
+<br><br>
+
+<button onclick="next2()" id="next2btn" style="display:none;">
+Next ➜
 </button>
 
 </div>
 
-<!-- PAGE 2 -->
-<div id="page2" class="screen">
+<!-- PAGE 3 ENVELOPE -->
+<div id="page3" class="screen">
 
 <h2>One more thing...</h2>
 
-<div id="envelope">💌</div>
+<div id="envelope" onclick="openEnvelope()">💌</div>
 
-<p>Click the envelope + play music</p>
-
-<button onclick="playExperience()">
-▶ Play
-</button>
+<p>Click the envelope</p>
 
 </div>
 
 <!-- LETTER -->
-<div id="page3" class="screen">
+<div id="page4" class="screen">
 
 <div id="letterBox">
 
@@ -163,16 +161,15 @@ const letterText = `Hi Alanna,
 
 Happy Birthday!!
 
-I made this little website for you because I thought it would be fun (and it was).
+I made this little website for you because I thought it would be fun.
 
-Hope this next year is full of calm days, good books, and things that make you feel like yourself again.
+Hope this year brings you calm, love, and good books.
 
 – Eugenio 💛`;
 
 function show(id){
 document.querySelectorAll(".screen")
 .forEach(s => s.classList.remove("active"));
-
 document.getElementById(id).classList.add("active");
 }
 
@@ -183,44 +180,44 @@ const pass = document.getElementById("password").value;
 
 if(pass === "octopus"){
 show("page1");
-startConfetti();
 }else{
 document.getElementById("wrong").innerText="Nice try 😌";
 }
 
 }
 
-/* NEXT */
-function nextPage(){
+/* PAGE 1 */
+function next1(){
 show("page2");
 }
 
-/* 🎬 CINEMATIC EXPERIENCE */
-function playExperience(){
+/* MUSIC */
+function playMusic(){
 
-// music
-window.open("https://www.youtube.com/watch?v=gfiJnbbhC2c&list=RDgfiJnbbhC2c&start_radio=1","_blank");
+window.open(
+"https://www.youtube.com/watch?v=gfiJnbbhC2c&list=RDgfiJnbbhC2c&start_radio=1",
+"_blank"
+);
 
-// fade effect
-document.body.classList.add("fade");
-
-// confetti burst
-startConfetti();
-
-// open envelope animation
-document.getElementById("envelope").style.transform="scale(0.8)";
-setTimeout(()=>openEnvelope(),1200);
-
+// unlock next button
+document.getElementById("next2btn").style.display="inline-block";
 }
 
-/* OPEN LETTER */
+/* PAGE 2 → PAGE 3 */
+function next2(){
+show("page3");
+}
+
+/* ENVELOPE */
 function openEnvelope(){
 
-show("page3");
+show("page4");
 
 document.getElementById("letterBox").style.display="block";
 
 typeLetter();
+
+startConfetti();
 
 }
 
@@ -244,7 +241,7 @@ typing();
 /* CONFETTI */
 function startConfetti(){
 
-for(let i=0;i<90;i++){
+for(let i=0;i<80;i++){
 
 let c=document.createElement("div");
 c.className="confetti";
