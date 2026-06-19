@@ -36,10 +36,9 @@ input{
     margin-top:10px;
 }
 
-button{
-    padding:10px 20px;
-    margin-top:10px;
-    cursor:pointer;
+<button onclick="playMusic()">
+▶ Play True Friend
+</button>
 }
 
 /* CONFETTI */
@@ -100,20 +99,13 @@ No, I will not be taking questions.
 <br><br>
 
 <!-- MUSIC -->
-<button onclick="playMusic()">
-▶ Play True Friend
-</button>
+function playMusic(){
+    window.open("https://www.youtube.com/watch?v=3tGJ4ZlZ7u0", "_blank");
+}
 
 <br><br>
 
-<iframe
-id="music"
-width="0"
-height="0"
-src="https://www.youtube.com/embed/3tGJ4ZlZ7u0?enablejsapi=1"
-frameborder="0"
-allow="autoplay">
-</iframe>
+
 
 </div>
 
