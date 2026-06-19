@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Birthday Message</title>
+<title>Happy Birthday Alanna</title>
 
 <style>
 
@@ -14,27 +14,26 @@ body{
     overflow:hidden;
 }
 
-.container{
+/* LOCK SCREEN */
+#locked{
     padding:50px;
 }
 
-h1{
-    margin-top:40px;
-}
-
+/* MESSAGE */
 #message{
     display:none;
+    padding:40px;
+    max-width:700px;
+    margin:auto;
     background:white;
-    padding:25px;
-    margin:30px auto;
-    width:80%;
-    max-width:600px;
     border-radius:15px;
 }
 
+/* INPUT */
 input{
     padding:10px;
     font-size:16px;
+    margin-top:10px;
 }
 
 button{
@@ -43,30 +42,19 @@ button{
     cursor:pointer;
 }
 
-/* ✨ STARS */
-#stars{
+/* CONFETTI */
+.confetti{
     position:fixed;
-    width:100%;
-    height:100%;
-    top:0;
-    left:0;
-    pointer-events:none;
-    overflow:hidden;
-}
-
-.star{
-    position:absolute;
-    font-size:18px;
-    animation:fall linear forwards;
+    top:-10px;
+    width:10px;
+    height:10px;
+    background:red;
+    animation:fall 3s linear forwards;
 }
 
 @keyframes fall{
-    from{
-        transform:translateY(-50px);
-        opacity:1;
-    }
     to{
-        transform:translateY(100vh);
+        transform:translateY(100vh) rotate(360deg);
         opacity:0;
     }
 }
@@ -76,20 +64,14 @@ button{
 
 <body>
 
-<div id="stars"></div>
-
-<div class="container">
-
 <!-- LOCK SCREEN -->
 <div id="locked">
 
 <h1>🐙 Birthday Message Incoming</h1>
 
 <p>
-Hi Alanna,<br><br>
-
-Yes, I made an entire website for your birthday.<br>
-No, I don't want to talk about how much time this took. 😌
+Yes, I made a whole webpage for your birthday.<br>
+No, I will not be taking questions.
 </p>
 
 <p><b>Enter secret password:</b></p>
@@ -109,17 +91,35 @@ No, I don't want to talk about how much time this took. 😌
 
 <h1>Happy Birthday Alanna 🎂</h1>
 
-<p>
-(This is where your letter goes 💛)
+<p id="letter">
+
+(Here goes your letter 💛)
+
 </p>
 
-</div>
+<br><br>
+
+<!-- MUSIC -->
+<button onclick="playMusic()">
+▶ Play True Friend
+</button>
+
+<br><br>
+
+<iframe
+id="music"
+width="0"
+height="0"
+src="https://www.youtube.com/embed/3tGJ4ZlZ7u0?enablejsapi=1"
+frameborder="0"
+allow="autoplay">
+</iframe>
 
 </div>
 
 <script>
 
-// 🔓 PASSWORD
+/* PASSWORD */
 function unlock(){
 
 const pass =
@@ -130,7 +130,8 @@ if(pass === "octopus"){
 document.getElementById("locked").style.display="none";
 document.getElementById("message").style.display="block";
 
-startStars();
+startConfetti();
+typeLetter();
 
 }else{
 
@@ -141,24 +142,63 @@ document.getElementById("wrong").innerText =
 
 }
 
-// ✨ STARS
-function createStar(){
+/* CONFETTI */
+function startConfetti(){
 
-const star = document.createElement("div");
-star.className="star";
-star.innerHTML="✨";
+for(let i=0;i<80;i++){
 
-star.style.left = Math.random()*100 + "vw";
-star.style.animationDuration =
-(3 + Math.random()*3) + "s";
+let c = document.createElement("div");
+c.className="confetti";
+c.style.left=Math.random()*100+"vw";
+c.style.backgroundColor=
+["#ff6b6b","#feca57","#48dbfb","#1dd1a1"][Math.floor(Math.random()*4)];
 
-document.getElementById("stars").appendChild(star);
+c.style.animationDuration=(2+Math.random()*3)+"s";
 
-setTimeout(()=>star.remove(),7000);
+document.body.appendChild(c);
+
+setTimeout(()=>c.remove(),5000);
+
 }
 
-function startStars(){
-setInterval(createStar,300);
+}
+
+/* TYPE LETTER */
+function typeLetter(){
+
+let text =
+`Hi Alanna,
+
+Happy Birthday!!
+
+(This is where your real letter goes 💛)`;
+
+let i=0;
+
+let speed = 30;
+
+function typing(){
+
+if(i < text.length){
+
+document.getElementById("letter").innerHTML += text.charAt(i);
+i++;
+setTimeout(typing,speed);
+}
+
+}
+
+document.getElementById("letter").innerHTML="";
+typing();
+
+}
+
+/* MUSIC */
+function playMusic(){
+
+let iframe = document.getElementById("music");
+iframe.src += "&autoplay=1";
+
 }
 
 </script>
