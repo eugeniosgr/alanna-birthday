@@ -61,12 +61,6 @@ button{
     border-radius:15px;
     position:relative;
     z-index:2;
-    animation:pop 0.6s ease;
-}
-
-@keyframes pop{
-    from{transform:scale(0.7);opacity:0;}
-    to{transform:scale(1);opacity:1;}
 }
 
 /* CONFETTI */
@@ -108,12 +102,8 @@ button{
 }
 
 @keyframes floatPhoto{
-    from{
-        transform:translateY(100vh);
-    }
-    to{
-        transform:translateY(-200px);
-    }
+    from{transform:translateY(100vh);}
+    to{transform:translateY(-200px);}
 }
 
 @keyframes fadePhoto{
@@ -130,6 +120,9 @@ button{
 
 <!-- BACKGROUND PHOTOS -->
 <div id="photo-bg"></div>
+
+<!-- SOUND -->
+<audio id="openSound" src="https://www.soundjay.com/misc/sounds/page-flip-4.mp3"></audio>
 
 <!-- LOCK -->
 <div id="locked" class="screen active">
@@ -206,16 +199,12 @@ Next ➜
 <script>
 
 const letterText = `Hi Alanna,
-
 Happy Birthday!!
-
 I made this little website for you because I thought it would be fun.
-
 Hope this year brings you calm, love, and good books.
-
 – Eugenio 💛`;
 
-/* NAVIGATION */
+/* NAV */
 function show(id){
 document.querySelectorAll(".screen")
 .forEach(s => s.classList.remove("active"));
@@ -224,7 +213,6 @@ document.getElementById(id).classList.add("active");
 
 /* LOCK */
 function unlock(){
-
 const pass = document.getElementById("password").value;
 
 if(pass === "octopus"){
@@ -233,32 +221,25 @@ startConfetti();
 }else{
 document.getElementById("wrong").innerText="Nice try 😌";
 }
-
 }
 
-/* PAGE 1 */
-function next1(){
-show("page2");
-}
+/* PAGE FLOW */
+function next1(){ show("page2"); }
 
-/* MUSIC */
 function playMusic(){
-
 window.open(
 "https://www.youtube.com/watch?v=gfiJnbbhC2c&list=RDgfiJnbbhC2c&start_radio=1",
 "_blank"
 );
-
 document.getElementById("next2btn").style.display="inline-block";
 }
 
-/* PAGE 2 */
-function next2(){
-show("page3");
-}
+function next2(){ show("page3"); }
 
 /* ENVELOPE */
 function openEnvelope(){
+
+document.getElementById("openSound").play();
 
 show("page4");
 
@@ -272,21 +253,39 @@ startPhotos();
 
 }
 
-/* TYPE LETTER */
+/* LETTER BY LINES */
 function typeLetter(){
 
-let i=0;
+const lines = letterText.split("\n");
+let i = 0;
+
 document.getElementById("letter").innerHTML="";
 
-function typing(){
-if(i < letterText.length){
-document.getElementById("letter").innerHTML += letterText.charAt(i);
+function showLine(){
+
+if(i < lines.length){
+
+let line = document.createElement("div");
+line.innerText = lines[i];
+line.style.opacity = 0;
+line.style.transform = "translateY(10px)";
+line.style.transition = "all 0.6s ease";
+
+document.getElementById("letter").appendChild(line);
+
+setTimeout(()=>{
+line.style.opacity = 1;
+line.style.transform = "translateY(0)";
+},50);
+
 i++;
-setTimeout(typing,25);
-}
+setTimeout(showLine,500);
+
 }
 
-typing();
+}
+
+showLine();
 }
 
 /* CONFETTI */
@@ -308,7 +307,9 @@ setTimeout(()=>c.remove(),5000);
 
 }
 
-/* PHOTOS */
+/* PHOTOS LOOP */
+let photoInterval;
+
 function startPhotos(){
 
 const images = [
@@ -318,7 +319,7 @@ const images = [
 "https://images.unsplash.com/photo-1520975920000-1a1a1a1a1a1a"
 ];
 
-for(let i=0;i<8;i++){
+photoInterval = setInterval(()=>{
 
 let img=document.createElement("img");
 img.className="photo";
@@ -326,11 +327,12 @@ img.src=images[Math.floor(Math.random()*images.length)];
 
 img.style.left=Math.random()*100+"vw";
 img.style.animationDuration=(10+Math.random()*10)+"s";
-img.style.animationDelay=(Math.random()*5)+"s";
 
 document.getElementById("photo-bg").appendChild(img);
 
-}
+setTimeout(()=>img.remove(),20000);
+
+},1200);
 
 }
 
